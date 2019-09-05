@@ -41,6 +41,7 @@ public class AppServer {
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String inputLine;
             String headr = "HTTP/1.1 200 OK\r\n" + "Content-Type: text/html\r\n"+"\r\n";
+            String headrI = "HTTP/1.1 200 OK\r\n" + "Content-Type: image/webp,*/*\r\n"+"\r\n";
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("Received: " + inputLine);
                 int index = inputLine.indexOf("/apps/");
@@ -62,14 +63,14 @@ public class AppServer {
                         out.println(hm.get(resource).process());
                     } catch (Exception e) {
                     }
-                } else if (inputLine.contains("html")) {
+                } else if (inputLine.contains(".html")) {
                     //   int i = inputLine.indexOf('/') + 1;
 
                     while (!urlInputLine.endsWith(".html") && i < inputLine.length()) {
                         urlInputLine += (inputLine.charAt(i++));
                     }
                     System.err.println("Hola amigos " + urlInputLine);
-                    String urlDirectoryServer = System.getProperty("user.dir") + "\\recursos\\" + urlInputLine;
+                    String urlDirectoryServer = System.getProperty("user.dir") + "/recursos/" + urlInputLine;
                     System.out.println(urlDirectoryServer);
                     try {
 
@@ -81,19 +82,18 @@ public class AppServer {
                             out.println(readerFile.readLine());
                         }
                     } catch (FileNotFoundException e) {
+                        System.out.println(e.getMessage());
                         // out.println("HTTP/2.0 404 Not found.");
                         // out.println("Content-Type: text/html");
                         // out.println("\r\n");
                     }
-                } else if (inputLine.contains("jpg")) {
+                } else if (inputLine.contains(".jpg")) {
                     while (!urlInputLine.endsWith(".jpg") && i < inputLine.length()) {
                         urlInputLine += (inputLine.charAt(i++));
                     }
-                    BufferedImage github = ImageIO
-                            .read(new File(System.getProperty("user.dir") + "\\recursos\\" + urlInputLine));
-                    out.println("HTTP/2.0 200 OK");
-                    out.write("Content-Type: image/webp,*/*");
-                    out.println("\r\n");
+                    BufferedImage github = ImageIO.read(new File(System.getProperty("user.dir") + "/recursos/" + urlInputLine));
+                
+                    out.println(headrI);
                     ImageIO.write(github, "jpg", clientSocket.getOutputStream());
                 }
                 if (!in.ready()) {
