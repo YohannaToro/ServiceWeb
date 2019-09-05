@@ -41,7 +41,7 @@ public class AppServer {
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String inputLine;
             String headr = "HTTP/1.1 200 OK\r\n" + "Content-Type: text/html\r\n"+"\r\n";
-            String headrI = "HTTP/1.1 200 OK\r\n" + "Content-Type: image/webp\r\n"+"\r\n";
+            String headrI = "HTTP/1.1 200 OK\r\n" + "Content-Type: image/png\r\n"+"\r\n";
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("Received: " + inputLine);
                 int index = inputLine.indexOf("/apps/");
@@ -87,14 +87,14 @@ public class AppServer {
                         // out.println("Content-Type: text/html");
                         // out.println("\r\n");
                     }
-                } else if (inputLine.contains(".jpg")) {
-                    while (!urlInputLine.endsWith(".jpg") && i < inputLine.length()) {
+                } else if (inputLine.contains(".png")) {
+                    while (!urlInputLine.endsWith(".png") && i < inputLine.length()) {
                         urlInputLine += (inputLine.charAt(i++));
                     }
                     BufferedImage github = ImageIO.read(new File(System.getProperty("user.dir") + "/recursos/" + urlInputLine));
                 
                     out.println(headrI);
-                    ImageIO.write(github, "jpg", clientSocket.getOutputStream());
+                    ImageIO.write(github, "png", clientSocket.getOutputStream());
                 }
                 if (!in.ready()) {
                     break;
