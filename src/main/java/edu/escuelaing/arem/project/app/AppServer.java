@@ -73,8 +73,7 @@ public class AppServer {
                     System.out.println(urlDirectoryServer);
                     try {
 
-                        BufferedReader readerFile = new BufferedReader(
-                                new InputStreamReader(new FileInputStream(urlDirectoryServer), "UTF8"));
+                        BufferedReader readerFile = new BufferedReader(new FileReader(urlDirectoryServer));
                         //out.println("HTTP/2.0 200 OK");
                         //out.println("Content-Type: text/html");
                         out.println(headr);
