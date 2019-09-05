@@ -41,7 +41,7 @@ public class AppServer {
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String inputLine;
             String headr = "HTTP/1.1 200 OK\r\n" + "Content-Type: text/html\r\n"+"\r\n";
-            String headrI = "HTTP/1.1 200 OK\r\n" + "Content-Type: image/webp,*/*\r\n"+"\r\n";
+            String headrI = "HTTP/1.1 200 OK\r\n" + "Content-Type: image/webp\r\n"+"\r\n";
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("Received: " + inputLine);
                 int index = inputLine.indexOf("/apps/");
