@@ -1,4 +1,4 @@
-﻿# Servidor Web (tipo Apache)
+# Servidor Web (tipo Apache)
 
 Servidor web (tipo Apache) que recibe multiples solicitudes no concurentes, con capacidad de responder paginas html e imagenes tipo Html, adicionala a esto debe proveer un framework IoC para contruir aplicaciones web a partir de POJOS.
 
