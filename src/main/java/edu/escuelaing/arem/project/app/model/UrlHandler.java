@@ -2,14 +2,26 @@ package edu.escuelaing.arem.project.app.model;
 
 import java.lang.reflect.Method;
 
+/**
+ *
+ * @author YohannaToro
+ */
 public class UrlHandler implements Handlers{
     private Method method;
 
+    /**
+     *
+     * @param m
+     */
     public UrlHandler(Method m){
         this.method=m;
 
     }
 
+    /**
+     *
+     * @return cadena de un metodo invoacado
+     */
     public String process() {
         try{
             return (String) method.invoke(null, null);
@@ -20,6 +32,12 @@ public class UrlHandler implements Handlers{
    
     }
 
+    /**
+     *
+     * @param arg array de objetos 
+     * @return cadena de la invocacion de un metodo
+     * @throws Exception
+     */
     @Override
     public String process(Object[] arg) throws Exception {
         try{

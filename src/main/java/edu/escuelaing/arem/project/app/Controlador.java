@@ -8,6 +8,11 @@ import java.io.IOException;
  */
 public class Controlador {
     
+    /**
+     *
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException
     {
         AppServer.inicializar();

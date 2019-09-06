@@ -10,17 +10,27 @@ import java.net.URL;
 
 /**
  *
- * @author 2132219
+ * @author 
  */
 public class test {
 
+    /**
+     * retorna un string de una funcion que tiene posee una etiqutea
+     * @return
+     */
     @Web("test")
     public static String prueba() {
-        return "hola amiwis coronamos";
+        return "hola este framework es hecho por Yohanna Toro";
 
     }
-    @Web("test2")
-    public static String greeting(String name) {
+
+    /**
+     * funcion que posee una etiqueta y retorna hola + el parametro que se pasa
+     * @param name
+     * @return
+     */
+    @Web("hola")
+    public static String holaName(String name) {
         System.out.println("hola");
         return "hola"+name;
     }

@@ -15,12 +15,22 @@ import javax.print.DocFlavor.STRING;
 import edu.escuelaing.arem.project.app.model.Handlers;
 import edu.escuelaing.arem.project.app.model.UrlHandler;
 
+/**
+ *
+ * @author YohannaToro
+ */
 public class AppServer {
 
     private static HashMap<String, Handlers> hm = new HashMap<String, Handlers>();
+    
 
+    /**Escucha el puerto por donde se esta realizando la peticion
+     *
+     * @throws IOException
+     */
     public static void escuchar() throws IOException {
         ServerSocket serverSocket = null;
+        Browser br;
         try {
             serverSocket = new ServerSocket(getPort());
         } catch (IOException e) {
@@ -40,11 +50,76 @@ public class AppServer {
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String inputLine;
+            br=new Browser(in,out,hm);
             String headr = "HTTP/1.1 200 OK\r\n" + "Content-Type: text/html\r\n"+"\r\n";
-            //String headrI = "HTTP/1.1 200 OK\r\n" + "Content-Type: image/png\r\n"+"\r\n";
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("Received: " + inputLine);
-                int index = inputLine.indexOf("/apps/");
+                getRequest(inputLine,headr,clientSocket,br);
+                if (!in.ready()) {
+                    break;
+                }
+            }
+            out.close();
+            in.close();
+            clientSocket.close();
+        }
+
+    }
+
+    /**
+     * Inicializa la clase que tiene las anotaciones 
+     */
+    public static void inicializar() {
+        try {
+            String p = "edu.escuelaing.arem.project.app.";
+            bind(p + "test");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *retorna el puerto que se esta pidiendo
+     * @return int 
+     */
+    public static int getPort() {
+        if (System.getenv("PORT") != null) {
+            return Integer.parseInt(System.getenv("PORT"));
+        }
+        return 4567; // returns default port if heroku-port isn't set (i.e. on localhost)
+    }
+
+    /**
+     * carga los metodos que poseen anotaciones y los agraga al hashmap
+     * @param classpath camino de la clase donde se instancio
+     */
+    private static void bind(String classpath) {
+        try {
+
+            Class c = Class.forName(classpath);          
+            for (Method m : c.getMethods()) {
+                if (m.isAnnotationPresent(Web.class)) {
+                    Handlers h = new UrlHandler(m);
+                    hm.put("/apps/" + m.getAnnotation(Web.class).value(), new UrlHandler(m));
+                }
+            }
+            System.out.println(hm.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    /**
+     * realiza la solicitud pedida en el broser dependiendo del tio solicitado
+     * @param inputLine corresponde a la direccion de entrada
+     * @param headr encabezado de la pagina
+     * @param i corresponde al indice en la url donde se empieza a pedir el recurso
+     * @param clientSocket socket del cliente
+     * @param br solicitud del browser
+     * @throws IOException
+     */
+    private static void getRequest(String inputLine,String headr,Socket clientSocket, Browser br) throws IOException{
+        int index = inputLine.indexOf("/apps/");
                 String resource = "", urlInputLine ="";
                 int i = -1;
                 if (index != -1){
@@ -55,110 +130,11 @@ public class AppServer {
                     i = inputLine.indexOf('/') + 1;
                 }
                 if (inputLine.contains("/apps/")) {
-                    try {
-                        out.println(headr);
-                        if(resource.contains(":")) {
-                            int id = resource.indexOf(":");
-                            out.println(hm.get(resource.substring(0, id)).process(new Object[]{resource.substring(id+1)}));
-                        }else {
-                            
-                        System.err.println("What " + resource);
-                        out.println(hm.get(resource).process());
-                        }
-                    } catch (Exception e) {
-                    }
+                   br.readApp(resource, headr);
                 } else if (inputLine.contains(".html")) {
-                    while (!urlInputLine.endsWith(".html") && i < inputLine.length()) {
-                        urlInputLine += (inputLine.charAt(i++));
-                    }
-                    System.err.println("Hola amigos " + urlInputLine);
-                    String urlDirectoryServer = System.getProperty("user.dir") + "/recursos/" + urlInputLine;
-                    System.out.println(urlDirectoryServer);
-                    try {
-
-                        BufferedReader readerFile = new BufferedReader(new FileReader(urlDirectoryServer));
-                        //out.println("HTTP/2.0 200 OK");
-                        //out.println("Content-Type: text/html");
-                        out.println(headr);
-                        while (readerFile.ready()) {
-                            out.println(readerFile.readLine());
-                        }
-                    } catch (FileNotFoundException e) {
-                        System.out.println(e.getMessage());
-                        // out.println("HTTP/2.0 404 Not found.");
-                        // out.println("Content-Type: text/html");
-                        // out.println("\r\n");
-                    }
+                   br.readHtml(inputLine, headr, i);
                 } else if (inputLine.contains(".png")) {
-                    while (!urlInputLine.endsWith(".png") && i < inputLine.length()) {
-                        urlInputLine += (inputLine.charAt(i++));
-                    }
-                    BufferedImage github = ImageIO.read(new File(System.getProperty("user.dir") + "/recursos/" + urlInputLine));
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    //out.println(headrI);
-                    ImageIO.write(github, "png", baos);
-                    byte [] imageBy = baos.toByteArray();
-                    DataOutputStream outImg = new DataOutputStream(clientSocket.getOutputStream());
-                    outImg.writeBytes("HTTP/1.1 200 OK \r\n");
-                    outImg.writeBytes("Content-Type: image/png\r\n");
-                    outImg.writeBytes("Content-Length: " + imageBy.length);
-                    outImg.writeBytes("\r\n\r\n");
-                    outImg.write(imageBy);
-					outImg.close();
-                    out.println(outImg.toString());
+                    br.readPng(inputLine, headr, i, clientSocket);
                 }
-                if (!in.ready()) {
-                    break;
-                }
-
-            }
-            out.close();
-            in.close();
-            clientSocket.close();
-        }
-
-    }
-
-    public static void inicializar() {
-        try {
-
-            // traemos el classpath cuando escuchamos
-            String p = "edu.escuelaing.arem.project.app.";
-            bind(p + "test");
-            // bind(p+labinfo.getPath());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            // TODO: handle exception
-        }
-
-    }
-    public static int getPort() {
-        if (System.getenv("PORT") != null) {
-            return Integer.parseInt(System.getenv("PORT"));
-        }
-        return 4567; // returns default port if heroku-port isn't set (i.e. on localhost)
-    }
-    public static void bind(String classpath) {
-        try {
-
-            Class c = Class.forName(classpath);
-            
-            for (Method m : c.getMethods()) {
-
-                if (m.isAnnotationPresent(Web.class)) {
-                    System.out.println(m.getName());
-                    Handlers h = new UrlHandler(m);
-                    System.out.println("nuevo metodo "+h);
-                    hm.put("/apps/" + m.getAnnotation(Web.class).value(), new UrlHandler(m));
-                }
-            }
-            System.out.println(hm.toString());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-
     }
 }
