@@ -81,7 +81,7 @@ mvn test
 
 ## Autor
 
-* **Yohanna Toro**  - [YohannaToro](https://github.com/YohannaToro)
+* **Yohanna Toro**  - [![Star on GitHub](https://img.shields.io/github/stars/jonsn0w/hyde.svg?style=social)][YohannaToro](https://github.com/YohannaToro)
 
 
 ## Licencia
