@@ -45,16 +45,19 @@ public class Browser {
      * @param resource recurso solicitado en la url
      * @param headr encabezado de la pagina
      */
-    public void readApp(String resource,String headr){
+    public void readApp(String resource,String headr,Socket clientSocket) throws IOException{
         try {
                         out.println(headr);
-                        if(resource.contains(":")) {
-                            int id = resource.indexOf(":");
-                            out.println(hm.get(resource.substring(0, id)).process(new Object[]{resource.substring(id+1)}));
+                        if(resource.contains("?") ) {
+                            int id = resource.indexOf("?");
+                            //System.out.println("kiki"+resource.substring(id+7));
+                            
+                            out.println(hm.get(resource.substring(0, id)).process(new Object[]{resource.substring(id+6)}));
                         }else {
                         out.println(hm.get(resource).process());
                         }
                     } catch (Exception e) {
+                        //notFound(clientSocket);
                     }
     }
 

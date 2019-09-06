@@ -32,6 +32,6 @@ public class test {
     @Web("hola")
     public static String holaName(String name) {
         System.out.println("hola");
-        return "hola"+name;
+        return "hola:  "+ name;
     }
 }

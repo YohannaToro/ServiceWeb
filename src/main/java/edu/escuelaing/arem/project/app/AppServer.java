@@ -61,6 +61,7 @@ public class AppServer {
                     break;
                 }
             }
+            
             out.close();
             in.close();
             clientSocket.close();
@@ -137,7 +138,7 @@ public class AppServer {
                     i = inputLine.indexOf('/') + 1;
                 }
                 if (inputLine.contains("/apps/")) {
-                   br.readApp(resource, headr);
+                   br.readApp(resource, headr,clientSocket);
                 } else if (inputLine.contains(".html")) {
                    br.readHtml(inputLine, headr, i);
                 } else if (inputLine.contains(".png")) {
