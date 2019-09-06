@@ -57,6 +57,18 @@ Heroku local web
 
 [![Servidor Apache](https://www.herokucdn.com/deploy/button.png)](https://yohanna-framework.herokuapp.com/apps/test)
 
+Uso de metodos con POJOs
+```
+https://yohanna-framework.herokuapp.com/apps/test
+https://yohanna-framework.herokuapp.com/apps/test2:name
+```
+Imagenes PNG y HTML
+```
+https://yohanna-framework.herokuapp.com/yowis.html
+https://yohanna-framework.herokuapp.com/github.png
+```
+
+
 ### Ejecutar pruebas y aplicaciòn
 
 Ejecutra pruebas
@@ -81,7 +93,7 @@ mvn test
 
 ## Autor
 
-* **Yohanna Toro**  - [![Star on GitHub]](https://github.com/YohannaToro)
+* **Yohanna Toro**  - [YohannaToro](https://github.com/YohannaToro)
 
 
 ## Licencia
