@@ -23,7 +23,7 @@ Descargue el repositorio lo puede realizar de dos formas descargando el .zip o u
 En caso de usar git la linea de comando para clonar el repositiorio es:
 
 ```
-git clone https://github.com/YohannaToro/Calculator
+git clone https://github.com/YohannaToro/ServiceWeb.git
 ```
 Abrir terminal y dirigirse a la siguiente carpeta:
 
@@ -47,19 +47,15 @@ Ejecutar heroku de forma local
 ```
 Heroku local web
 ```
-Ejecutar proyecto
-```
-Heroku local web
-```
 
 ### Despliegue en  Heroku
 
-[![Servidor Apache](https://www.herokucdn.com/deploy/button.png)](https://yohanna-framework.herokuapp.com/apps/test)
+[![Servidor Apache](https://www.herokucdn.com/deploy/button.png)](https://yohanna-framework.herokuapp.com/yowis.html)
 
 Uso de metodos con POJOs
 ```
 https://yohanna-framework.herokuapp.com/apps/test
-https://yohanna-framework.herokuapp.com/apps/test2:name
+https://yohanna-framework.herokuapp.com/apps/hola:profe
 ```
 Imagenes PNG y HTML
 ```
@@ -74,16 +70,6 @@ Ejecutra pruebas
 ```
 mvn test
 ```
-
-
-
-
-### Casos de prueba
-
-
-### Codigo de pruebas
-
-
 
 
 ## Built With
