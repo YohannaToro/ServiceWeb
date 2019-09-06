@@ -19,4 +19,9 @@ public class test {
         return "hola amiwis coronamos";
 
     }
+    @Web("test2")
+    public static String greeting(String name) {
+        System.out.println("hola");
+        return "hola"+name;
+    }
 }

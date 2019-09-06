@@ -56,16 +56,18 @@ public class AppServer {
                 }
                 if (inputLine.contains("/apps/")) {
                     try {
-                        //out.println("HTTP/2.0 200 OK");
-                        //out.println("Content-Type: text/html");
                         out.println(headr);
+                        if(resource.contains(":")) {
+                            int id = resource.indexOf(":");
+                            out.println(hm.get(resource.substring(0, id)).process(new Object[]{resource.substring(id+1)}));
+                        }else {
+                            
                         System.err.println("What " + resource);
                         out.println(hm.get(resource).process());
+                        }
                     } catch (Exception e) {
                     }
                 } else if (inputLine.contains(".html")) {
-                    //   int i = inputLine.indexOf('/') + 1;
-
                     while (!urlInputLine.endsWith(".html") && i < inputLine.length()) {
                         urlInputLine += (inputLine.charAt(i++));
                     }
@@ -141,14 +143,13 @@ public class AppServer {
         try {
 
             Class c = Class.forName(classpath);
-            // if(classpath.contains("/apps")){
-
-            // }
-
+            
             for (Method m : c.getMethods()) {
 
                 if (m.isAnnotationPresent(Web.class)) {
+                    System.out.println(m.getName());
                     Handlers h = new UrlHandler(m);
+                    System.out.println("nuevo metodo "+h);
                     hm.put("/apps/" + m.getAnnotation(Web.class).value(), new UrlHandler(m));
                 }
             }
