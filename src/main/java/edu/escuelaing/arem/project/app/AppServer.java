@@ -9,8 +9,10 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.net.*;
 
-
 import javax.print.DocFlavor.STRING;
+
+import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
 
 import edu.escuelaing.arem.project.app.model.Handlers;
 import edu.escuelaing.arem.project.app.model.UrlHandler;
@@ -66,21 +68,22 @@ public class AppServer {
 
     }
 
-    /**
-     * Inicializa la clase que tiene las anotaciones 
+       /**
+     * Inicializa la clase que tiene las anotaciones
      */
     public static void inicializar() {
         try {
-            String p = "edu.escuelaing.arem.project.app.";
-            bind(p + "test");
+            String p = "edu.escuelaing.arem.project.app";
+            bind(p);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     /**
-     *retorna el puerto que se esta pidiendo
-     * @return int 
+     * retorna el puerto que se esta pidiendo
+     * 
+     * @return int
      */
     public static int getPort() {
         if (System.getenv("PORT") != null) {
@@ -91,19 +94,23 @@ public class AppServer {
 
     /**
      * carga los metodos que poseen anotaciones y los agraga al hashmap
+     * 
      * @param classpath camino de la clase donde se instancio
      */
     private static void bind(String classpath) {
         try {
+            Reflections reflections = new Reflections(classpath, new SubTypesScanner(false));
+            Set<Class<? extends Object>> allClasses = reflections.getSubTypesOf(Object.class);
 
-            Class c = Class.forName(classpath);          
-            for (Method m : c.getMethods()) {
-                if (m.isAnnotationPresent(Web.class)) {
-                    Handlers h = new UrlHandler(m);
-                    hm.put("/apps/" + m.getAnnotation(Web.class).value(), new UrlHandler(m));
+            for (Class cls : allClasses) {
+                for (Method m : cls.getMethods()) {
+                    if (m.isAnnotationPresent(Web.class)) {
+                        Handlers h = new UrlHandler(m);
+                        hm.put("/apps/" + m.getAnnotation(Web.class).value(), new UrlHandler(m));
+                    }
                 }
+                System.out.println(hm.toString());
             }
-            System.out.println(hm.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
