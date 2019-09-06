@@ -14,7 +14,6 @@ Es necesario tener instalado:
 * Java 1.8 si no tiene instalado java en su dispositivo siga el sigueinte tutorial https://java.com/en/download/help/download_options.xml
 * Git tutorial: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
 * Heroku 
-* Spark 
 ```
 
 ## Instalaciòn y ejecucion del proyecto
@@ -56,7 +55,7 @@ Heroku local web
 
 ### Despliegue en  Heroku
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://yohanna-framework.herokuapp.com/apps/test)
+[![Servidor Apache](https://www.herokucdn.com/deploy/button.png)](https://yohanna-framework.herokuapp.com/apps/test)
 
 ### Ejecutar pruebas y aplicaciòn
 
@@ -70,16 +69,10 @@ mvn test
 
 ### Casos de prueba
 
-![enter image description here](https://lh3.googleusercontent.com/YgF6pFc5Fg6PORbBR6IfjoPx42GVKv9XPC35nauSoUTDsT75vJ8fKWnmZofsIYjvGXKvRorOZVI)
-
-
-Algunos de los casos probados fueron estos dos devido probamos un grupo de numeros reales tanto enteros como complejos y con las formulas ya mencioandas obtenemos la desviaciòn estandar y la media
-
 
 ### Codigo de pruebas
 
-Para realizar las prubas se probaron dos funciones la desviacion estandar y la media:
-en cada una de ellas ejecutamos la aplicacion de un grupo de datos y se realiza la correspondiente comparaciòn entre el valor esperado y el que se obtiene para saber si es correcto o incorrecto
+
 
 
 ## Built With
