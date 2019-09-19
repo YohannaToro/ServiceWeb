@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Controlador",
+            "request": "launch",
+            "mainClass": "edu.escuelaing.arem.project.app.Controlador",
+            "projectName": "Controlador"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - IntroduccionAWS",
+            "request": "launch",
+            "mainClass": "edu.escuelaing.arem.project.app.intro.IntroduccionAWS",
+            "projectName": "Controlador"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - IntroductionAWS",
+            "request": "launch",
+            "mainClass": "edu.escuelaing.arem.project.app.intro.IntroductionAWS",
+            "projectName": "Controlador"
+        }
+    ]
+}

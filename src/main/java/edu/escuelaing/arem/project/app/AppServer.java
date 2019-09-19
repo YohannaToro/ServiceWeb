@@ -21,12 +21,12 @@ import edu.escuelaing.arem.project.app.model.UrlHandler;
  *
  * @author YohannaToro
  */
-public class AppServer {
+public class AppServer implements Runnable {
 
     private static HashMap<String, Handlers> hm = new HashMap<String, Handlers>();
-    
 
-    /**Escucha el puerto por donde se esta realizando la peticion
+    /**
+     * Escucha el puerto por donde se esta realizando la peticion
      *
      * @throws IOException
      */
@@ -52,16 +52,16 @@ public class AppServer {
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String inputLine;
-            br=new Browser(in,out,hm);
-            String headr = "HTTP/1.1 200 OK\r\n" + "Content-Type: text/html\r\n"+"\r\n";
+            br = new Browser(in, out, hm);
+            String headr = "HTTP/1.1 200 OK\r\n" + "Content-Type: text/html\r\n" + "\r\n";
             while ((inputLine = in.readLine()) != null) {
                 System.out.println("Received: " + inputLine);
-                getRequest(inputLine,headr,clientSocket,br);
+                getRequest(inputLine, headr, clientSocket, br);
                 if (!in.ready()) {
                     break;
                 }
             }
-            
+
             out.close();
             in.close();
             clientSocket.close();
@@ -69,7 +69,7 @@ public class AppServer {
 
     }
 
-       /**
+    /**
      * Inicializa la clase que tiene las anotaciones
      */
     public static void inicializar() {
@@ -117,32 +117,45 @@ public class AppServer {
         }
 
     }
+
     /**
      * realiza la solicitud pedida en el broser dependiendo del tio solicitado
-     * @param inputLine corresponde a la direccion de entrada
-     * @param headr encabezado de la pagina
-     * @param i corresponde al indice en la url donde se empieza a pedir el recurso
+     * 
+     * @param inputLine    corresponde a la direccion de entrada
+     * @param headr        encabezado de la pagina
+     * @param i            corresponde al indice en la url donde se empieza a pedir
+     *                     el recurso
      * @param clientSocket socket del cliente
-     * @param br solicitud del browser
+     * @param br           solicitud del browser
      * @throws IOException
      */
-    private static void getRequest(String inputLine,String headr,Socket clientSocket, Browser br) throws IOException{
+    private static void getRequest(String inputLine, String headr, Socket clientSocket, Browser br) throws IOException {
         int index = inputLine.indexOf("/apps/");
-                String resource = "", urlInputLine ="";
-                int i = -1;
-                if (index != -1){
-                    for (i = index; i < inputLine.length() && inputLine.charAt(i) != ' '; i++) {
-                        resource += inputLine.charAt(i);
-                    }
-                }else{
-                    i = inputLine.indexOf('/') + 1;
-                }
-                if (inputLine.contains("/apps/")) {
-                   br.readApp(resource, headr,clientSocket);
-                } else if (inputLine.contains(".html")) {
-                   br.readHtml(inputLine, headr, i);
-                } else if (inputLine.contains(".png")) {
-                    br.readPng(inputLine, headr, i, clientSocket);
-                }
+        String resource = "", urlInputLine = "";
+        int i = -1;
+        if (index != -1) {
+            for (i = index; i < inputLine.length() && inputLine.charAt(i) != ' '; i++) {
+                resource += inputLine.charAt(i);
+            }
+        } else {
+            i = inputLine.indexOf('/') + 1;
+        }
+        if (inputLine.contains("/apps/")) {
+            br.readApp(resource, headr, clientSocket);
+        } else if (inputLine.contains(".html")) {
+            br.readHtml(inputLine, headr, i);
+        } else if (inputLine.contains(".png")) {
+            br.readPng(inputLine, headr, i, clientSocket);
+        }
+    }
+
+    @Override
+    public void run() {
+        try {
+            escuchar();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }
