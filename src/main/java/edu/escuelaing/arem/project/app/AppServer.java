@@ -22,9 +22,12 @@ import edu.escuelaing.arem.project.app.model.UrlHandler;
  * @author YohannaToro
  */
 public class AppServer implements Runnable {
+    private static int port;
 
     private static HashMap<String, Handlers> hm = new HashMap<String, Handlers>();
-
+    AppServer(int port){
+        port=this.port;
+    }
     /**
      * Escucha el puerto por donde se esta realizando la peticion
      *
@@ -34,7 +37,7 @@ public class AppServer implements Runnable {
         ServerSocket serverSocket = null;
         Browser br;
         try {
-            serverSocket = new ServerSocket(getPort());
+            serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             System.err.println("Could not listen on port: 35000.");
             System.exit(1);
