@@ -2,6 +2,12 @@
 
 Servidor web Concurres (tipo Apache) que recibe multiples solicitudes , con capacidad de responder paginas html e imagenes tipo Html, adicionala a esto debe proveer un framework IoC para contruir aplicaciones web a partir de POJOS y se creara un cliente que se deslegara en AWS.
 
+# Github Cliente Concurrente
+
+```
+https://github.com/YohannaToro/ClientThread
+```
+
 
 ### Pre-requisitos
 
